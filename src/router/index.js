@@ -35,6 +35,102 @@ export const constantRouterMap = [
 ]
 
 export const asyncRouterMap = [
+  //资产
+  {
+    path: '/asset',
+    component: Layout,
+    redirect: '/asset/product',
+    name: 'asset',
+    meta: {title: '资产', icon: 'product'},
+    children: [{
+      path: 'product',
+      name: 'product',
+      component: () => import('@/views/asset/product/index'),
+      meta: {title: '商品列表', icon: 'product-list'}
+    },
+      {
+        path: 'addProduct',
+        name: 'addProduct',
+        component: () => import('@/views/asset/product/add'),
+        meta: {title: '添加商品', icon: 'product-add'}
+      },
+      {
+        path: 'updateProduct',
+        name: 'updateProduct',
+        component: () => import('@/views/asset/product/update'),
+        meta: {title: '修改商品', icon: 'product-add'},
+        hidden: true
+      },
+      {
+        path: 'productCate',
+        name: 'productCate',
+        component: () => import('@/views/asset/productCate/index'),
+        meta: {title: '商品分类', icon: 'product-cate'}
+      },
+      {
+        path: 'addProductCate',
+        name: 'addProductCate',
+        component: () => import('@/views/asset/productCate/add'),
+        meta: {title: '添加商品分类'},
+        hidden: true
+      },
+      {
+        path: 'updateProductCate',
+        name: 'updateProductCate',
+        component: () => import('@/views/asset/productCate/update'),
+        meta: {title: '修改商品分类'},
+        hidden: true
+      },
+      {
+        path: 'productAttr',
+        name: 'productAttr',
+        component: () => import('@/views/asset/productAttr/index'),
+        meta: {title: '商品类型', icon: 'product-attr'}
+      },
+      {
+        path: 'productAttrList',
+        name: 'productAttrList',
+        component: () => import('@/views/asset/productAttr/productAttrList'),
+        meta: {title: '商品属性列表'},
+        hidden: true
+      },
+      {
+        path: 'addProductAttr',
+        name: 'addProductAttr',
+        component: () => import('@/views/asset/productAttr/addProductAttr'),
+        meta: {title: '添加商品属性'},
+        hidden: true
+      },
+      {
+        path: 'updateProductAttr',
+        name: 'updateProductAttr',
+        component: () => import('@/views/asset/productAttr/updateProductAttr'),
+        meta: {title: '修改商品属性'},
+        hidden: true
+      },
+      {
+        path: 'assetFloor',
+        name: 'assetFloor',
+        component: () => import('@/views/asset/assetFloor/index'),
+        meta: {title: '资产管理', icon: 'product-assetFloor'}
+      },
+      {
+        path: 'addBrand',
+        name: 'addBrand',
+        component: () => import('@/views/asset/assetFloor/add'),
+        meta: {title: '添加资产'},
+        hidden: true
+      },
+      {
+        path: 'updateBrand',
+        name: 'updateBrand',
+        component: () => import('@/views/asset/assetFloor/update'),
+        meta: {title: '编辑资产'},
+        hidden: true
+      }
+    ]
+  },
+  // 商品
   {
     path: '/pms',
     component: Layout,
@@ -111,7 +207,7 @@ export const asyncRouterMap = [
         path: 'brand',
         name: 'brand',
         component: () => import('@/views/pms/brand/index'),
-        meta: {title: '品牌管理', icon: 'product-brand'}
+        meta: {title: '品牌管理', icon: 'product-assetFloor'}
       },
       {
         path: 'addBrand',
@@ -248,7 +344,7 @@ export const asyncRouterMap = [
         path: 'brand',
         name: 'homeBrand',
         component: () => import('@/views/sms/brand/index'),
-        meta: {title: '品牌推荐', icon: 'product-brand'}
+        meta: {title: '品牌推荐', icon: 'product-assetFloor'}
       },
       {
         path: 'new',
