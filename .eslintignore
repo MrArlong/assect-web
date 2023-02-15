@@ -1,0 +1,14 @@
+build/*.js
+src/assets
+public
+dist
+lib
+src/static/jwps.es6.js
+src/components/Progees/package/refactor/task/task-components/UserTask.vue
+FlowCondition.vue
+src/views/unifiedUser/userManagement/index.vue
+src/views/unifiedUser/userManagement/deptCopy.vue
+components/*
+src/views/handle/mixin/btnDatas.js
+src/views/scheduleConfig/configList.vue
+src/views/scheduleConfig/calendar.vue
