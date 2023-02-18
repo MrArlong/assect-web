@@ -23,42 +23,12 @@
       <div style="margin-top: 15px">
         <el-form :inline="true" :model="listQuery" size="small" label-width="140px">
           <el-form-item label="输入搜索：">
-            <el-input v-model="listQuery.keyword" style="width: 203px" placeholder="商品名称" />
+            <el-input v-model="listQuery.keyword" style="width: 203px" placeholder="房间号" />
           </el-form-item>
-          <el-form-item label="商品货号：">
-            <el-input v-model="listQuery.productSn" style="width: 203px" placeholder="商品货号" />
-          </el-form-item>
-          <el-form-item label="商品分类：">
-            <el-cascader
-              v-model="selectProductCateValue"
-              clearable
-              :options="productCateOptions"
-            />
-          </el-form-item>
-          <el-form-item label="商品品牌：">
-            <el-select v-model="listQuery.brandId" placeholder="请选择品牌" clearable>
+          <el-form-item label="资产：">
+            <el-select v-model="listQuery.floorId" clearable placeholder="请选择">
               <el-option
-                v-for="item in brandOptions"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </el-select>
-          </el-form-item>
-          <el-form-item label="上架状态：">
-            <el-select v-model="listQuery.publishStatus" placeholder="全部" clearable>
-              <el-option
-                v-for="item in publishStatusOptions"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </el-select>
-          </el-form-item>
-          <el-form-item label="审核状态：">
-            <el-select v-model="listQuery.verifyStatus" placeholder="全部" clearable>
-              <el-option
-                v-for="item in verifyStatusOptions"
+                v-for="item in floorList"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
@@ -102,7 +72,7 @@
         </el-table-column>
         <el-table-column label="面积" width="120" align="center">
           <template slot-scope="scope">
-            <{{ scope.row.acreage }}
+            {{ scope.row.acreage }}
           </template>
         </el-table-column>
         <el-table-column label="装修" width="140" align="center">
@@ -115,7 +85,12 @@
         </el-table-column>
         <el-table-column label="是否已租" width="100" align="center">
           <template slot-scope="scope">
-            {{ scope.row.isOccupancy }}
+            <el-switch
+              v-model="scope.row.isOccupancy"
+              :active-value="'1'"
+              :inactive-value="'0'"
+              @change="updateIsOy(scope.$index, scope.row)"
+            />
           </template>
         </el-table-column>
         <el-table-column label="展示状态" width="100" align="center">
@@ -124,7 +99,7 @@
               v-model="scope.row.zszt"
               :active-value="'1'"
               :inactive-value="'0'"
-              @change="handleFactoryStatusChange(scope.$index, scope.row)"
+              @change="updateZszt(scope.$index, scope.row)"
             />
           </template>
         </el-table-column>
@@ -134,20 +109,8 @@
             <p>
               <el-button
                 size="mini"
-                @click="handleShowProduct(scope.$index, scope.row)"
-              >查看
-              </el-button>
-              <el-button
-                size="mini"
                 @click="handleUpdateProduct(scope.$index, scope.row)"
               >编辑
-              </el-button>
-            </p>
-            <p>
-              <el-button
-                size="mini"
-                @click="handleShowLog(scope.$index, scope.row)"
-              >日志
               </el-button>
               <el-button
                 size="mini"
@@ -159,29 +122,6 @@
           </template>
         </el-table-column>
       </el-table>
-    </div>
-    <div class="batch-operate-container">
-      <el-select
-        v-model="operateType"
-        size="small"
-        placeholder="批量操作"
-      >
-        <el-option
-          v-for="item in operates"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        />
-      </el-select>
-      <el-button
-        style="margin-left: 20px"
-        class="search-button"
-        type="primary"
-        size="small"
-        @click="handleBatchOperate()"
-      >
-        确定
-      </el-button>
     </div>
     <div class="pagination-container">
       <el-pagination
@@ -195,86 +135,11 @@
         @current-change="handleCurrentChange"
       />
     </div>
-    <el-dialog
-      title="编辑货品信息"
-      :visible.sync="editSkuInfo.dialogVisible"
-      width="40%"
-    >
-      <span>商品货号：</span>
-      <span>{{ editSkuInfo.productSn }}</span>
-      <el-input v-model="editSkuInfo.keyword" placeholder="按sku编号搜索" size="small" style="width: 50%;margin-left: 20px">
-        <el-button slot="append" icon="el-icon-search" @click="handleSearchEditSku" />
-      </el-input>
-      <el-table
-        style="width: 100%;margin-top: 20px"
-        :data="editSkuInfo.stockList"
-        border
-      >
-        <el-table-column
-          label="SKU编号"
-          align="center"
-        >
-          <template slot-scope="scope">
-            <el-input v-model="scope.row.skuCode" />
-          </template>
-        </el-table-column>
-        <el-table-column
-          v-for="(item,index) in editSkuInfo.productAttr"
-          :key="item.id"
-          :label="item.name"
-          align="center"
-        >
-          <template slot-scope="scope">
-            {{ getProductSkuSp(scope.row,index) }}
-          </template>
-        </el-table-column>
-        <el-table-column
-          label="销售价格"
-          width="80"
-          align="center"
-        >
-          <template slot-scope="scope">
-            <el-input v-model="scope.row.price" />
-          </template>
-        </el-table-column>
-        <el-table-column
-          label="商品库存"
-          width="80"
-          align="center"
-        >
-          <template slot-scope="scope">
-            <el-input v-model="scope.row.stock" />
-          </template>
-        </el-table-column>
-        <el-table-column
-          label="库存预警值"
-          width="100"
-          align="center"
-        >
-          <template slot-scope="scope">
-            <el-input v-model="scope.row.lowStock" />
-          </template>
-        </el-table-column>
-      </el-table>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="editSkuInfo.dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="handleEditSkuConfirm">确 定</el-button>
-      </span>
-    </el-dialog>
   </div>
 </template>
 <script>
-import {
-  fetchList,
-  updateDeleteStatus,
-  updateNewStatus,
-  updateRecommendStatus,
-  updatePublishStatus
-} from '@/api/product'
-import { fetchList as fetchSkuStockList, update as updateSkuStockList } from '@/api/skuStock'
-import { fetchList as fetchProductAttrList } from '@/api/productAttr'
-import { fetchList as fetchBrandList } from '@/api/brand'
-import { fetchListWithChildren } from '@/api/productCate'
+import { fetchList, getAssetFloorList, updateIsOccupancy } from '@/api/assetRoom'
+import { updateFactoryStatus, deleteBrand } from '@/api/assetRoom'
 
 const defaultListQuery = {
   keyword: null,
@@ -284,7 +149,7 @@ const defaultListQuery = {
   verifyStatus: null,
   productSn: null,
   productCategoryId: null,
-  brandId: null
+  floorId: null
 }
 export default {
   name: 'ProductList',
@@ -299,6 +164,7 @@ export default {
   },
   data() {
     return {
+      floorList: [],
       editSkuInfo: {
         dialogVisible: false,
         productId: null,
@@ -308,40 +174,6 @@ export default {
         productAttr: [],
         keyword: null
       },
-      operates: [
-        {
-          label: '商品上架',
-          value: 'publishOn'
-        },
-        {
-          label: '商品下架',
-          value: 'publishOff'
-        },
-        {
-          label: '设为推荐',
-          value: 'recommendOn'
-        },
-        {
-          label: '取消推荐',
-          value: 'recommendOff'
-        },
-        {
-          label: '设为新品',
-          value: 'newOn'
-        },
-        {
-          label: '取消新品',
-          value: 'newOff'
-        },
-        {
-          label: '转移到分类',
-          value: 'transferCategory'
-        },
-        {
-          label: '移入回收站',
-          value: 'recycle'
-        }
-      ],
       operateType: null,
       listQuery: Object.assign({}, defaultListQuery),
       list: null,
@@ -369,7 +201,7 @@ export default {
   },
   watch: {
     selectProductCateValue: function(newValue) {
-      if (newValue != null && newValue.length == 2) {
+      if (newValue != null && newValue.length === 2) {
         this.listQuery.productCategoryId = newValue[1]
       } else {
         this.listQuery.productCategoryId = null
@@ -378,10 +210,55 @@ export default {
   },
   created() {
     this.getList()
-    this.getBrandList()
-    this.getProductCateList()
+    this.getFloorList()
   },
   methods: {
+    getFloorList() {
+      getAssetFloorList().then(res => {
+        const list = res.data
+        for (let i = 0; i < list.length; i++) {
+          this.floorList.push({ label: list[i].name, value: list[i].id })
+        }
+      })
+    },
+    updateZszt(index, row) {
+      var data = new URLSearchParams()
+      data.append('ids', row.id)
+      data.append('zszt', row.zszt)
+      updateFactoryStatus(data).then(response => {
+        this.$message({
+          message: '修改成功',
+          type: 'success',
+          duration: 1000
+        })
+      }).catch(error => {
+        console.log(error)
+        if (row.zszt === 0) {
+          row.zszt = 1
+        } else {
+          row.zszt = 0
+        }
+      })
+    },
+    updateIsOy(index, row) {
+      var data = new URLSearchParams()
+      data.append('ids', row.id)
+      data.append('isOccupancy', row.isOccupancy)
+      updateIsOccupancy(data).then(response => {
+        this.$message({
+          message: '修改成功',
+          type: 'success',
+          duration: 1000
+        })
+      }).catch(error => {
+        console.log(error)
+        if (row.isOccupancy === 0) {
+          row.isOccupancy = 1
+        } else {
+          row.isOccupancy = 0
+        }
+      })
+    },
     getProductSkuSp(row, index) {
       const spData = JSON.parse(row.spData)
       if (spData != null && index < spData.length) {
@@ -398,49 +275,15 @@ export default {
         this.total = response.data.total
       })
     },
-    getBrandList() {
-      fetchBrandList({ pageNum: 1, pageSize: 100 }).then(response => {
-        this.brandOptions = []
-        const brandList = response.data.list
-        for (let i = 0; i < brandList.length; i++) {
-          this.brandOptions.push({ label: brandList[i].name, value: brandList[i].id })
-        }
-      })
-    },
-    getProductCateList() {
-      fetchListWithChildren().then(response => {
-        const list = response.data
-        this.productCateOptions = []
-        for (let i = 0; i < list.length; i++) {
-          const children = []
-          if (list[i].children != null && list[i].children.length > 0) {
-            for (let j = 0; j < list[i].children.length; j++) {
-              children.push({ label: list[i].children[j].name, value: list[i].children[j].id })
-            }
-          }
-          this.productCateOptions.push({ label: list[i].name, value: list[i].id, children: children })
-        }
-      })
-    },
     handleShowSkuEditDialog(index, row) {
       this.editSkuInfo.dialogVisible = true
       this.editSkuInfo.productId = row.id
       this.editSkuInfo.productSn = row.productSn
       this.editSkuInfo.productAttributeCategoryId = row.productAttributeCategoryId
       this.editSkuInfo.keyword = null
-      fetchSkuStockList(row.id, { keyword: this.editSkuInfo.keyword }).then(response => {
-        this.editSkuInfo.stockList = response.data
-      })
-      if (row.productAttributeCategoryId != null) {
-        fetchProductAttrList(row.productAttributeCategoryId, { type: 0 }).then(response => {
-          this.editSkuInfo.productAttr = response.data.list
-        })
-      }
     },
     handleSearchEditSku() {
-      fetchSkuStockList(this.editSkuInfo.productId, { keyword: this.editSkuInfo.keyword }).then(response => {
-        this.editSkuInfo.stockList = response.data
-      })
+
     },
     handleEditSkuConfirm() {
       if (this.editSkuInfo.stockList == null || this.editSkuInfo.stockList.length <= 0) {
@@ -456,14 +299,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        updateSkuStockList(this.editSkuInfo.productId, this.editSkuInfo.stockList).then(response => {
-          this.$message({
-            message: '修改成功',
-            type: 'success',
-            duration: 1000
-          })
-          this.editSkuInfo.dialogVisible = false
-        })
+
       })
     },
     handleSearchList() {
@@ -566,9 +402,14 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        const ids = []
-        ids.push(row.id)
-        this.updateDeleteStatus(1, ids)
+        deleteBrand(row.id).then(response => {
+          this.$message({
+            message: '删除成功',
+            type: 'success',
+            duration: 1000
+          })
+          this.getList()
+        })
       })
     },
     handleUpdateProduct(index, row) {
@@ -587,49 +428,22 @@ export default {
       const params = new URLSearchParams()
       params.append('ids', ids)
       params.append('publishStatus', publishStatus)
-      updatePublishStatus(params).then(response => {
-        this.$message({
-          message: '修改成功',
-          type: 'success',
-          duration: 1000
-        })
-      })
     },
     updateNewStatus(newStatus, ids) {
       const params = new URLSearchParams()
       params.append('ids', ids)
       params.append('newStatus', newStatus)
-      updateNewStatus(params).then(response => {
-        this.$message({
-          message: '修改成功',
-          type: 'success',
-          duration: 1000
-        })
-      })
     },
     updateRecommendStatus(recommendStatus, ids) {
       const params = new URLSearchParams()
       params.append('ids', ids)
       params.append('recommendStatus', recommendStatus)
-      updateRecommendStatus(params).then(response => {
-        this.$message({
-          message: '修改成功',
-          type: 'success',
-          duration: 1000
-        })
-      })
     },
     updateDeleteStatus(deleteStatus, ids) {
       const params = new URLSearchParams()
       params.append('ids', ids)
       params.append('deleteStatus', deleteStatus)
-      updateDeleteStatus(params).then(response => {
-        this.$message({
-          message: '删除成功',
-          type: 'success',
-          duration: 1000
-        })
-      })
+
       this.getList()
     }
   }

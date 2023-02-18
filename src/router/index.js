@@ -71,7 +71,8 @@ export const asyncRouterMap = [
       path: 'addRoom',
       name: 'addRoom',
       component: () => import('@/views/asset/room/add'),
-      meta: { title: '添加房间', icon: 'room-add' }
+      meta: { title: '添加房间', icon: 'room-add' },
+      hidden: true
     },
     {
       path: 'updateRoom',

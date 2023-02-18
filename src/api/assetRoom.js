@@ -9,14 +9,14 @@ export function getAssetFloorList(params) {
 }
 export function fetchList(params) {
   return request({
-    url: '/assetFloot/list',
+    url: '/room/list',
     method: 'get',
     params: params
   })
 }
 export function createBrand(data) {
   return request({
-    url: '/assetFloot/create',
+    url: '/room/create',
     method: 'post',
     data: data
   })
@@ -31,7 +31,15 @@ export function updateShowStatus(data) {
 
 export function updateFactoryStatus(data) {
   return request({
-    url: '/assetFloot/update/factoryStatus',
+    url: '/room/update/factoryStatus',
+    method: 'post',
+    data: data
+  })
+}
+
+export function updateIsOccupancy(data) {
+  return request({
+    url: '/room/update/updateIsOccupancy',
     method: 'post',
     data: data
   })
@@ -39,14 +47,14 @@ export function updateFactoryStatus(data) {
 
 export function deleteBrand(id) {
   return request({
-    url: '/assetFloot/delete/' + id,
+    url: '/room/delete/' + id,
     method: 'get'
   })
 }
 
 export function getBrand(id) {
   return request({
-    url: '/assetFloot/' + id,
+    url: '/room/' + id,
     method: 'get'
   })
 }

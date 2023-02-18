@@ -147,6 +147,7 @@ export default {
                 })
               })
             }
+            this.$router.push({ path: '/asset/assetFloor' })
           })
         } else {
           this.$message({

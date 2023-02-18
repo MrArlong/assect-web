@@ -1,11 +1,11 @@
 <template>
-  <product-detail :is-edit="false" />
+  <room-detail :is-edit="false" />
 </template>
 <script>
-import ProductDetail from './components/ProductDetail'
+import RoomDetail from './components/RoomDetail'
 export default {
-  name: 'AddProduct',
-  components: { ProductDetail }
+  name: 'AddRoom',
+  components: { RoomDetail }
 }
 </script>
 <style>
