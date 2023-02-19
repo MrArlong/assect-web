@@ -12,11 +12,11 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="房间号">
-        <el-input v-model="room.roomNum" />
-      </el-form-item>
       <el-form-item label="楼层号：">
         <el-input v-model="room.floorNum" />
+      </el-form-item>
+      <el-form-item label="房间号">
+        <el-input v-model="room.roomNum" />
       </el-form-item>
       <el-form-item label="面积：">
         <el-input v-model="room.acreage" />
@@ -137,9 +137,9 @@ export default {
                   type: 'success',
                   duration: 1000
                 })
+                this.$router.push({ path: '/asset/room' })
               })
             }
-            this.$router.push({ path: '/asset/room' })
           })
         } else {
           this.$message({

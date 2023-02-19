@@ -7,6 +7,20 @@ export function getAssetFloorList(params) {
     params: params
   })
 }
+export function getAssetLcList(params) {
+  return request({
+    url: '/room/getLc',
+    method: 'get',
+    params: params
+  })
+}
+export function getAssetFjList(params) {
+  return request({
+    url: '/room/getFj',
+    method: 'get',
+    params: params
+  })
+}
 export function fetchList(params) {
   return request({
     url: '/room/list',

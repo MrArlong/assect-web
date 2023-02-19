@@ -60,14 +60,14 @@
       >
         <el-table-column type="selection" width="60" align="center" />
         <el-table-column type="index" label="编号" width="100" align="center" />
-        <el-table-column label="房间号" width="120" align="center">
-          <template slot-scope="scope">
-            {{ scope.row.roomNum }}
-          </template>
-        </el-table-column>
         <el-table-column label="楼层" align="center">
           <template slot-scope="scope">
             {{ scope.row.floorNum }}
+          </template>
+        </el-table-column>
+        <el-table-column label="房间号" width="120" align="center">
+          <template slot-scope="scope">
+            {{ scope.row.roomNum }}
           </template>
         </el-table-column>
         <el-table-column label="面积" width="120" align="center">

@@ -145,9 +145,9 @@ export default {
                   type: 'success',
                   duration: 1000
                 })
+                this.$router.push({ path: '/asset/assetFloor' })
               })
             }
-            this.$router.push({ path: '/asset/assetFloor' })
           })
         } else {
           this.$message({

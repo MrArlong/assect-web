@@ -80,6 +80,25 @@ export const asyncRouterMap = [
       component: () => import('@/views/asset/room/update'),
       meta: { title: '修改房间', icon: 'room-add' },
       hidden: true
+    }, {
+      path: 'orderForm',
+      name: 'orderForm',
+      component: () => import('@/views/asset/order/index'),
+      meta: { title: '订单配置', icon: 'order-list' }
+    },
+    {
+      path: 'orderFormAdd',
+      name: 'orderFormAdd',
+      component: () => import('@/views/asset/order/orderAdd'),
+      meta: { title: '添加订单', icon: 'order-add' },
+      hidden: true
+    },
+    {
+      path: 'orderFormDetail',
+      name: 'orderFormDetail',
+      component: () => import('@/views/asset/order/orderDetail'),
+      meta: { title: '订单详情' },
+      hidden: true
     }
     ]
   },
