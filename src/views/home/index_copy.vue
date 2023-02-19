@@ -38,16 +38,62 @@
       <div class="layout-title">待处理事务</div>
       <div class="un-handle-content">
         <el-row :gutter="20">
-          <el-col :span="20">
+          <el-col :span="8">
+            <div class="un-handle-item">
+              <span class="font-medium">待付款订单</span>
+              <span style="float: right" class="color-danger">(10)</span>
+            </div>
+          </el-col>
+          <el-col :span="8">
             <div class="un-handle-item">
               <span class="font-medium">XXXXXXXXXXX房间即将到期请注意时间</span>
+              <span style="float: right" class="color-danger">(10)</span>
+            </div>
+          </el-col>
+          <el-col :span="8">
+            <div class="un-handle-item">
+              <span class="font-medium">待确认收货订单</span>
+              <span style="float: right" class="color-danger">(10)</span>
             </div>
           </el-col>
         </el-row>
         <el-row :gutter="20">
-          <el-col :span="20">
+          <el-col :span="8">
             <div class="un-handle-item">
-              <span class="font-medium">XXXXXXXXXXX房间即将到期请注意时间</span>
+              <span class="font-medium">待发货订单</span>
+              <span style="float: right" class="color-danger">(10)</span>
+            </div>
+          </el-col>
+          <el-col :span="8">
+            <div class="un-handle-item">
+              <span class="font-medium">新缺货登记</span>
+              <span style="float: right" class="color-danger">(10)</span>
+            </div>
+          </el-col>
+          <el-col :span="8">
+            <div class="un-handle-item">
+              <span class="font-medium">待处理退款申请</span>
+              <span style="float: right" class="color-danger">(10)</span>
+            </div>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="8">
+            <div class="un-handle-item">
+              <span class="font-medium">已发货订单</span>
+              <span style="float: right" class="color-danger">(10)</span>
+            </div>
+          </el-col>
+          <el-col :span="8">
+            <div class="un-handle-item">
+              <span class="font-medium">待处理退货订单</span>
+              <span style="float: right" class="color-danger">(10)</span>
+            </div>
+          </el-col>
+          <el-col :span="8">
+            <div class="un-handle-item">
+              <span class="font-medium">广告位即将到期</span>
+              <span style="float: right" class="color-danger">(10)</span>
             </div>
           </el-col>
         </el-row>
