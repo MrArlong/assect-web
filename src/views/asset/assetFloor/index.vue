@@ -43,22 +43,28 @@
       >
         <el-table-column type="selection" width="60" align="center" />
         <el-table-column type="index" label="编号" width="100" align="center" />
-        <el-table-column label="资产名称" align="center">
+        <el-table-column label="资产名称" width="150" align="center">
           <template slot-scope="scope">{{ scope.row.name }}</template>
         </el-table-column>
-        <el-table-column label="资产地址" width="100" align="center">
+        <el-table-column label="资产地址" width="300" align="center">
           <template slot-scope="scope">{{ scope.row.address }}</template>
         </el-table-column>
-        <el-table-column label="所属地区" width="100" align="center">
+        <el-table-column label="所属地区" width="150" align="center">
           <template slot-scope="scope">{{ scope.row.region }}</template>
         </el-table-column>
-        <el-table-column label="联系人" width="100" align="center">
+        <el-table-column label="毛坯价格" width="150" align="center">
+          <template slot-scope="scope"><span v-if="scope.row.price">{{ scope.row.price }}元/月</span></template>
+        </el-table-column>
+        <el-table-column label="精装价格" width="150" align="center">
+          <template slot-scope="scope"><span v-if="scope.row.price">{{ scope.row.jzprice }}元/月</span></template>
+        </el-table-column>
+        <el-table-column label="联系人" width="150" align="center">
           <template slot-scope="scope">{{ scope.row.lxr }}</template>
         </el-table-column>
-        <el-table-column label="联系电话" width="100" align="center">
+        <el-table-column label="联系电话" width="150" align="center">
           <template slot-scope="scope">{{ scope.row.lxdh }}</template>
         </el-table-column>
-        <el-table-column label="展示状态" width="100" align="center">
+        <el-table-column label="展示状态" width="150" align="center">
           <template slot-scope="scope">
             <el-switch
               v-model="scope.row.zszt"
@@ -68,7 +74,7 @@
             />
           </template>
         </el-table-column>
-        <el-table-column label="相关" width="220" align="center">
+        <!--        <el-table-column label="相关" width="220" align="center">
           <template slot-scope="scope">
             <span>商品：</span>
             <el-button
@@ -85,7 +91,7 @@
             >1000
             </el-button>
           </template>
-        </el-table-column>
+        </el-table-column>-->
         <el-table-column label="操作" width="200" align="center">
           <template slot-scope="scope">
             <el-button

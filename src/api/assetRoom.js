@@ -1,5 +1,14 @@
 import request from '@/utils/request'
 
+// 临期预警
+export function getLqyjList(params) {
+  return request({
+    url: '/assetorder/lqyj',
+    method: 'get',
+    params: params
+  })
+}
+
 export function getAssetFloorList(params) {
   return request({
     url: '/assetFloot/listAll',

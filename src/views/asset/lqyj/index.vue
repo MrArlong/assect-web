@@ -22,9 +22,9 @@
       </div>
       <div style="margin-top: 15px">
         <el-form :inline="true" :model="listQuery" size="small" label-width="140px">
-          <el-form-item label="输入搜索：">
+          <!--          <el-form-item label="输入搜索：">
             <el-input v-model="listQuery.keyword" style="width: 203px" placeholder="房间号" />
-          </el-form-item>
+          </el-form-item>-->
           <el-form-item label="资产：">
             <el-select v-model="listQuery.floorId" clearable placeholder="请选择">
               <el-option
@@ -41,13 +41,13 @@
     <el-card class="operate-container" shadow="never">
       <i class="el-icon-tickets" />
       <span>数据列表</span>
-      <el-button
+      <!--      <el-button
         class="btn-add"
         size="mini"
         @click="handleAddProduct()"
       >
         添加
-      </el-button>
+      </el-button>-->
     </el-card>
     <div class="table-container">
       <el-table
@@ -60,70 +60,29 @@
       >
         <el-table-column type="selection" width="60" align="center" />
         <el-table-column type="index" label="编号" width="100" align="center" />
-        <el-table-column label="资产名称" width="120" align="center">
+        <el-table-column label="资产名称" width="250" align="center">
           <template slot-scope="scope">
             {{ scope.row.floorName }}
           </template>
         </el-table-column>
-        <el-table-column label="楼层" width="120" align="center">
+        <el-table-column label="楼层" width="250" align="center">
           <template slot-scope="scope">
             {{ scope.row.floorNum }}
           </template>
         </el-table-column>
-        <el-table-column label="房间号" width="200" align="center">
+        <el-table-column label="房间号" width="250" align="center">
           <template slot-scope="scope">
             {{ scope.row.roomNum }}
           </template>
         </el-table-column>
-        <el-table-column label="面积" width="150" align="center">
+        <el-table-column label="租赁开始时间" width="300" align="center">
           <template slot-scope="scope">
-            {{ scope.row.acreage }}
+            {{ scope.row.beginTime }}
           </template>
         </el-table-column>
-        <el-table-column label="装修" width="150" align="center">
+        <el-table-column label="租赁结束时间" width="300" align="center">
           <template slot-scope="scope">
-            {{ scope.row.decorationType }}
-          </template>
-        </el-table-column>
-        <el-table-column label="价格" width="200" align="center">
-          <template slot-scope="scope">{{ scope.row.price }}</template>
-        </el-table-column>
-        <el-table-column label="是否已租" width="150" align="center">
-          <template slot-scope="scope">
-            <el-switch
-              v-model="scope.row.isOccupancy"
-              :active-value="'1'"
-              :inactive-value="'0'"
-              @change="updateIsOy(scope.$index, scope.row)"
-            />
-          </template>
-        </el-table-column>
-        <el-table-column label="展示状态" width="150" align="center">
-          <template slot-scope="scope">
-            <el-switch
-              v-model="scope.row.zszt"
-              :active-value="'1'"
-              :inactive-value="'0'"
-              @change="updateZszt(scope.$index, scope.row)"
-            />
-          </template>
-        </el-table-column>
-
-        <el-table-column label="操作" width="160" align="center">
-          <template slot-scope="scope">
-            <p>
-              <el-button
-                size="mini"
-                @click="handleUpdateProduct(scope.$index, scope.row)"
-              >编辑
-              </el-button>
-              <el-button
-                size="mini"
-                type="danger"
-                @click="handleDelete(scope.$index, scope.row)"
-              >删除
-              </el-button>
-            </p>
+            {{ scope.row.endTime }}
           </template>
         </el-table-column>
       </el-table>
@@ -143,7 +102,7 @@
   </div>
 </template>
 <script>
-import { fetchList, getAssetFloorList, updateIsOccupancy } from '@/api/assetRoom'
+import { fetchList, getAssetFloorList, getLqyjList, updateIsOccupancy } from '@/api/assetRoom'
 import { updateFactoryStatus, deleteBrand } from '@/api/assetRoom'
 
 const defaultListQuery = {
@@ -274,7 +233,7 @@ export default {
     },
     getList() {
       this.listLoading = true
-      fetchList(this.listQuery).then(response => {
+      getLqyjList(this.listQuery).then(response => {
         this.listLoading = false
         this.list = response.data.list
         this.total = response.data.total

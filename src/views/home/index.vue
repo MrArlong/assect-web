@@ -1,53 +1,12 @@
 <template>
   <div class="app-container">
-
-    <div class="total-layout">
-      <el-row :gutter="20">
-        <el-col :span="6">
-          <div class="total-frame">
-            <img :src="img_home_order" class="total-icon">
-            <div class="total-title">今日订单总数</div>
-            <div class="total-value">200</div>
-          </div>
-        </el-col>
-        <el-col :span="6">
-          <div class="total-frame">
-            <img :src="img_home_today_amount" class="total-icon">
-            <div class="total-title">今日销售总额</div>
-            <div class="total-value">￥5000.00</div>
-          </div>
-        </el-col>
-        <el-col :span="6">
-          <div class="total-frame">
-            <img :src="img_home_yesterday_amount" class="total-icon">
-            <div class="total-title">昨日销售总额</div>
-            <div class="total-value">￥5000.00</div>
-          </div>
-        </el-col>
-        <!--<el-col :span="6">-->
-        <!--<div class="total-frame">-->
-        <!--<svg-icon icon-class="total-week" class="total-icon">-->
-        <!--</svg-icon>-->
-        <!--<div class="total-title">近7天销售总额</div>-->
-        <!--<div class="total-value">￥50000.00</div>-->
-        <!--</div>-->
-        <!--</el-col>-->
-      </el-row>
-    </div>
     <div class="un-handle-layout">
-      <div class="layout-title">待处理事务</div>
-      <div class="un-handle-content">
+      <div class="layout-title">临期预警<span style="float: right"><a href="/#/asset/lqyj">更多</a></span></div>
+      <div v-for="item in list" :key="item.id" class="un-handle-content">
         <el-row :gutter="20">
           <el-col :span="20">
             <div class="un-handle-item">
-              <span class="font-medium">XXXXXXXXXXX房间即将到期请注意时间</span>
-            </div>
-          </el-col>
-        </el-row>
-        <el-row :gutter="20">
-          <el-col :span="20">
-            <div class="un-handle-item">
-              <span class="font-medium">XXXXXXXXXXX房间即将到期请注意时间</span>
+              <span class="font-medium">{{ item.floorName }}-{{ item.floorNum }}-{{ item.roomNum }}即将到期，请注意时间！</span>
             </div>
           </el-col>
         </el-row>
@@ -170,24 +129,25 @@ import { str2Date } from '@/utils/date'
 import img_home_order from '@/assets/images/home_order.png'
 import img_home_today_amount from '@/assets/images/home_today_amount.png'
 import img_home_yesterday_amount from '@/assets/images/home_yesterday_amount.png'
+import { getAssetFloorList, getLqyjList } from '@/api/assetRoom'
 const DATA_FROM_BACKEND = {
   columns: ['date', 'orderCount', 'orderAmount'],
   rows: [
-    { date: '2018-11-01', orderCount: 10, orderAmount: 1093 },
-    { date: '2018-11-02', orderCount: 20, orderAmount: 2230 },
-    { date: '2018-11-03', orderCount: 33, orderAmount: 3623 },
-    { date: '2018-11-04', orderCount: 50, orderAmount: 6423 },
-    { date: '2018-11-05', orderCount: 80, orderAmount: 8492 },
-    { date: '2018-11-06', orderCount: 60, orderAmount: 6293 },
-    { date: '2018-11-07', orderCount: 20, orderAmount: 2293 },
-    { date: '2018-11-08', orderCount: 60, orderAmount: 6293 },
-    { date: '2018-11-09', orderCount: 50, orderAmount: 5293 },
-    { date: '2018-11-10', orderCount: 30, orderAmount: 3293 },
-    { date: '2018-11-11', orderCount: 20, orderAmount: 2293 },
-    { date: '2018-11-12', orderCount: 80, orderAmount: 8293 },
-    { date: '2018-11-13', orderCount: 100, orderAmount: 10293 },
-    { date: '2018-11-14', orderCount: 10, orderAmount: 1293 },
-    { date: '2018-11-15', orderCount: 40, orderAmount: 4293 }
+    { date: '2023-02-01', orderCount: 10, orderAmount: 1093 },
+    { date: '2023-02-02', orderCount: 20, orderAmount: 2230 },
+    { date: '2023-02-03', orderCount: 33, orderAmount: 3623 },
+    { date: '2023-02-04', orderCount: 50, orderAmount: 6423 },
+    { date: '2023-02-05', orderCount: 80, orderAmount: 8492 },
+    { date: '2023-02-06', orderCount: 60, orderAmount: 6293 },
+    { date: '2023-02-07', orderCount: 20, orderAmount: 2293 },
+    { date: '2023-02-08', orderCount: 60, orderAmount: 6293 },
+    { date: '2023-02-09', orderCount: 50, orderAmount: 5293 },
+    { date: '2023-02-10', orderCount: 30, orderAmount: 3293 },
+    { date: '2023-02-11', orderCount: 20, orderAmount: 2293 },
+    { date: '2023-02-12', orderCount: 80, orderAmount: 8293 },
+    { date: '2023-02-13', orderCount: 100, orderAmount: 10293 },
+    { date: '2023-02-14', orderCount: 10, orderAmount: 1293 },
+    { date: '2023-02-15', orderCount: 40, orderAmount: 4293 }
   ]
 }
 export default {
@@ -200,7 +160,7 @@ export default {
           onClick(picker) {
             const end = new Date()
             const start = new Date()
-            start.setFullYear(2018)
+            start.setFullYear(2023)
             start.setMonth(10)
             start.setDate(1)
             end.setTime(start.getTime() + 3600 * 1000 * 24 * 7)
@@ -211,7 +171,7 @@ export default {
           onClick(picker) {
             const end = new Date()
             const start = new Date()
-            start.setFullYear(2018)
+            start.setFullYear(2023)
             start.setMonth(10)
             start.setDate(1)
             end.setTime(start.getTime() + 3600 * 1000 * 24 * 30)
@@ -233,21 +193,42 @@ export default {
       dataEmpty: false,
       img_home_order,
       img_home_today_amount,
-      img_home_yesterday_amount
+      img_home_yesterday_amount,
+      list: null,
+      total: null,
+      listLoading: true
     }
   },
   created() {
     this.initOrderCountDate()
     this.getData()
+    this.getFloorList()
+    this.getList()
   },
   methods: {
+    getFloorList() {
+      getAssetFloorList().then(res => {
+        const list = res.data
+        for (let i = 0; i < list.length; i++) {
+          this.floorList.push({ label: list[i].name, value: list[i].id })
+        }
+      })
+    },
+    getList() {
+      this.listLoading = true
+      getLqyjList(this.listQuery).then(response => {
+        this.listLoading = false
+        this.list = response.data.list
+        this.total = response.data.total
+      })
+    },
     handleDateChange() {
       this.getData()
     },
     initOrderCountDate() {
       const start = new Date()
-      start.setFullYear(2018)
-      start.setMonth(10)
+      start.setFullYear(2023)
+      start.setMonth(1)
       start.setDate(1)
       const end = new Date()
       end.setTime(start.getTime() + 1000 * 60 * 60 * 24 * 7)
@@ -278,7 +259,7 @@ export default {
 
 <style scoped>
   .app-container {
-    margin-top: 40px;
+    margin-top: 0px;
     margin-left: 120px;
     margin-right: 120px;
   }
@@ -287,7 +268,7 @@ export default {
   }
 
   .total-layout {
-    margin-top: 20px;
+    margin-top: 0px;
   }
 
   .total-frame {
@@ -319,7 +300,7 @@ export default {
   }
 
   .un-handle-layout {
-    margin-top: 20px;
+    margin-top: 0px;
     border: 1px solid #DCDFE6;
   }
 
@@ -331,7 +312,7 @@ export default {
   }
 
   .un-handle-content {
-    padding: 20px 40px;
+    padding: 10px 40px;
   }
 
   .un-handle-item {

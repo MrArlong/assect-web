@@ -70,7 +70,7 @@ const defaultBrand = {
   isOccupancy: '',
   description: '',
   zszt: '',
-  sort: 0
+  sort: null
 
 }
 export default {

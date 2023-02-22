@@ -11,8 +11,6 @@
       :on-remove="handleRemove"
       :on-success="handleUploadSuccess"
       :on-preview="handlePreview"
-      :limit="5"
-      :on-exceed="handleExceed"
     >
       <el-button size="small" type="primary">点击上传</el-button>
       <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500KB</div>
@@ -74,9 +72,6 @@ export default {
     }
   },
   methods: {
-    handleExceed(files, fileList) {
-      this.$message.warning(`当前限制选择 5 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`)
-    },
     emitInput(val) {
       this.$emit('input', val)
     },

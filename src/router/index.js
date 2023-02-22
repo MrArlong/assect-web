@@ -84,7 +84,7 @@ export const asyncRouterMap = [
       path: 'orderForm',
       name: 'orderForm',
       component: () => import('@/views/asset/order/index'),
-      meta: { title: '订单配置', icon: 'order-list' }
+      meta: { title: '订单录入', icon: 'order-list' }
     },
     {
       path: 'orderFormAdd',
@@ -99,6 +99,11 @@ export const asyncRouterMap = [
       component: () => import('@/views/asset/order/orderDetail'),
       meta: { title: '订单详情' },
       hidden: true
+    }, {
+      path: 'lqyj',
+      name: 'lqyj',
+      component: () => import('@/views/asset/lqyj/index'),
+      meta: { title: '临期预警', icon: 'order-list' }
     }
     ]
   },

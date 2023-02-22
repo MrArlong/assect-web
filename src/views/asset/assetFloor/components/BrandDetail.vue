@@ -4,11 +4,17 @@
       <el-form-item label="资产名称：" prop="name" :rules="[{ required: true, message: '请输入资产名称', trigger: 'blur' }]">
         <el-input v-model="brand.name" />
       </el-form-item>
-      <el-form-item label="资产地址：">
+      <el-form-item label="资产地址：" prop="address" :rules="[{ required: true, message: '请输入资产地址', trigger: 'blur' }]">
         <el-input v-model="brand.address" />
       </el-form-item>
       <el-form-item label="所属区域：">
         <el-input v-model="brand.region" />
+      </el-form-item>
+      <el-form-item label="毛坯价格：" prop="address" :rules="[{ required: true, message: '请输入毛坯价格', trigger: 'blur' }]">
+        <el-input v-model="brand.price" />
+      </el-form-item>
+      <el-form-item label="精装价格：" prop="address" :rules="[{ required: true, message: '请输入精装价格', trigger: 'blur' }]">
+        <el-input v-model="brand.jzprice" />
       </el-form-item>
       <el-form-item label="联系人：">
         <el-input v-model="brand.lxr" />
@@ -16,20 +22,20 @@
       <el-form-item label="联系电话：">
         <el-input v-model="brand.lxdh" />
       </el-form-item>
-      <el-form-item label="使用状态：">
+      <el-form-item label="使用状态：" prop="address" :rules="[{ required: true, message: '请输入使用状态', trigger: 'blur' }]">
         <el-radio-group v-model="brand.syzt">
           <el-radio :label="'2'">出租</el-radio>
           <el-radio :label="'1'">建设中</el-radio>
           <el-radio :label="'0'">筹划中</el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="展示状态：">
+      <el-form-item label="展示状态：" prop="address" :rules="[{ required: true, message: '请输入展示状态', trigger: 'blur' }]">
         <el-radio-group v-model="brand.zszt">
           <el-radio :label="'1'">上架</el-radio>
           <el-radio :label="'0'">下架</el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="是否完工：">
+      <el-form-item label="是否完工：" prop="address" :rules="[{ required: true, message: '请输入是否完工', trigger: 'blur' }]">
         <el-radio-group v-model="brand.isfinish">
           <el-radio :label="'1'">是</el-radio>
           <el-radio :label="'0'">否</el-radio>
@@ -44,7 +50,7 @@
       <el-form-item label="地图经纬度：">
         <el-input v-model="brand.longitude" style="width: 170px" />
         <el-input v-model="brand.latitude" style="width: 170px" />
-        <el-button type="primary" @click="openTencentMaps()">打开地图</el-button>
+        <!--        <el-button type="primary" @click="openTencentMaps()">打开地图</el-button>-->
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit('brandFrom')">提交</el-button>
@@ -78,11 +84,13 @@ const defaultBrand = {
   lxdh: '',
   syzt: '',
   zszt: '',
-  isFinish: '',
+  isfinish: '',
   lbtp: '',
-  sort: 0,
+  sort: null,
   longitude: '',
-  latitude: ''
+  latitude: '',
+  price: null,
+  jzprice: null
 }
 
 window.addEventListener('message', function(event) {
