@@ -10,12 +10,12 @@
       <el-form-item label="所属区域：">
         <el-input v-model="brand.region" />
       </el-form-item>
-      <el-form-item label="毛坯价格：" prop="address" :rules="[{ required: true, message: '请输入毛坯价格', trigger: 'blur' }]">
+      <!--      <el-form-item label="毛坯价格：" prop="address" :rules="[{ required: true, message: '请输入毛坯价格', trigger: 'blur' }]">
         <el-input v-model="brand.price" />
       </el-form-item>
       <el-form-item label="精装价格：" prop="address" :rules="[{ required: true, message: '请输入精装价格', trigger: 'blur' }]">
         <el-input v-model="brand.jzprice" />
-      </el-form-item>
+      </el-form-item>-->
       <el-form-item label="联系人：">
         <el-input v-model="brand.lxr" />
       </el-form-item>
@@ -41,8 +41,25 @@
           <el-radio :label="'0'">否</el-radio>
         </el-radio-group>
       </el-form-item>
+      <el-form-item label="热门推荐：">
+        <el-radio-group v-model="brand.sftj">
+          <el-radio :label="'1'">是</el-radio>
+          <el-radio :label="'0'">否</el-radio>
+        </el-radio-group>
+      </el-form-item>
+      <el-form-item label="资产简介：">
+        <el-input
+          v-model="brand.remark"
+          :auto-size="true"
+          type="textarea"
+          placeholder="请输入内容"
+        />
+      </el-form-item>
+      <el-form-item label="首页图片：">
+        <single-upload v-model="brand.hometp" />
+      </el-form-item>
       <el-form-item label="轮播图片：">
-        <single-upload v-model="brand.lbtp" />
+        <single-upload-list v-model="brand.lbtp" />
       </el-form-item>
       <el-form-item label="排序：" prop="sort" :rules="[{type: 'number', message: '排序必须为数字'}]">
         <el-input v-model.number="brand.sort" />
@@ -76,6 +93,7 @@
 <script>
 import { createBrand, getBrand, updateBrand } from '@/api/assetFloot'
 import SingleUpload from '@/components/Upload/singleUpload'
+import singleUploadList from '@/components/Upload/singleUploadList'
 const defaultBrand = {
   name: '',
   address: '',
@@ -85,12 +103,15 @@ const defaultBrand = {
   syzt: '',
   zszt: '',
   isfinish: '',
+  sftj: '',
   lbtp: '',
+  hometp: '',
   sort: null,
   longitude: '',
   latitude: '',
   price: null,
-  jzprice: null
+  jzprice: null,
+  remark: ''
 }
 
 window.addEventListener('message', function(event) {
@@ -103,7 +124,7 @@ window.addEventListener('message', function(event) {
 }, false)
 export default {
   name: 'BrandDetail',
-  components: { SingleUpload },
+  components: { SingleUpload, singleUploadList },
   props: {
     isEdit: {
       type: Boolean,

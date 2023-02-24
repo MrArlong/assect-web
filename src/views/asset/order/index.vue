@@ -25,7 +25,7 @@
           <el-form-item label="输入搜索：">
             <el-input v-model="listQuery.orderNum" class="input-width" placeholder="订单编号" />
           </el-form-item>
-          <el-form-item label="收货人：">
+          <el-form-item label="租赁人：">
             <el-input v-model="listQuery.zlr" class="input-width" placeholder="租赁人" />
           </el-form-item>
         </el-form>
@@ -53,30 +53,38 @@
       >
         <el-table-column type="selection" width="60" align="center" />
 
-        <el-table-column label="订单编号" width="180" align="center">
+        <el-table-column label="订单编号" width="200" align="center">
           <template slot-scope="scope">{{ scope.row.orderNum }}</template>
         </el-table-column>
-        <el-table-column label="租赁人" width="180" align="center">
+        <el-table-column label="租赁人" width="200" align="center">
           <template slot-scope="scope">{{ scope.row.zlr }}</template>
         </el-table-column>
-        <el-table-column label="租赁人联系电话" align="center">
+        <el-table-column label="租赁人联系电话" width="200" align="center">
           <template slot-scope="scope">{{ scope.row.zlrlxdh }}</template>
         </el-table-column>
-        <el-table-column label="支付时间" width="120" align="center">
+        <el-table-column label="支付时间" width="150" align="center">
           <template slot-scope="scope">{{ scope.row.zfsj }}</template>
         </el-table-column>
-        <el-table-column label="支付方式" width="120" align="center">
+        <el-table-column label="支付方式" width="150" align="center">
           <template slot-scope="scope">{{ scope.row.zffs }}</template>
         </el-table-column>
-        <el-table-column label="总金额" width="120" align="center">
+        <el-table-column label="总金额" width="150" align="center">
           <template slot-scope="scope">{{ scope.row.zje }}</template>
         </el-table-column>
-        <el-table-column label="操作" width="200" align="center">
+        <el-table-column label="操作" width="300" align="center">
           <template slot-scope="scope">
+            <el-button
+              size="mini"
+              @click="handleUpdate(scope.$index, scope.row)"
+            >编辑订单</el-button>
             <el-button
               size="mini"
               @click="handleViewOrder(scope.$index, scope.row)"
             >查看订单</el-button>
+            <el-button
+              size="mini"
+              @click="handleDeleteOrder(scope.$index, scope.row)"
+            >删除订单</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -193,6 +201,9 @@ export default {
     this.getList()
   },
   methods: {
+    handleUpdate(index, row) {
+      this.$router.push({ path: '/asset/updateOrder', query: { id: row.id }})
+    },
     handleAddProduct() {
       this.$router.push({ path: '/asset/orderFormAdd' })
     },
@@ -220,9 +231,7 @@ export default {
     handleViewLogistics(index, row) {
     },
     handleDeleteOrder(index, row) {
-      const ids = []
-      ids.push(row.id)
-      this.deleteOrder(ids)
+      this.deleteOrder(row.id)
     },
     handleBatchOperate() {
       if (this.multipleSelection == null || this.multipleSelection.length < 1) {
@@ -313,7 +322,7 @@ export default {
         type: 'warning'
       }).then(() => {
         const params = new URLSearchParams()
-        params.append('ids', ids)
+        params.append('orderId', ids)
         deleteOrder(params).then(response => {
           this.$message({
             message: '删除成功！',

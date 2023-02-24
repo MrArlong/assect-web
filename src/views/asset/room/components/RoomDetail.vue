@@ -27,12 +27,12 @@
       <el-form-item label="价格：">
         <el-input v-model="room.price" />
       </el-form-item>
-      <el-form-item label="是否已租：">
+      <!--      <el-form-item label="是否已租：">
         <el-radio-group v-model="room.isOccupancy">
           <el-radio :label="'1'">已租</el-radio>
           <el-radio :label="'0'">未租</el-radio>
         </el-radio-group>
-      </el-form-item>
+      </el-form-item>-->
       <el-form-item label="房间简介：">
         <el-input
           v-model="room.description"

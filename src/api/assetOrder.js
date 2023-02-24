@@ -6,6 +6,13 @@ export function createOrder(data) {
     data: data
   })
 }
+export function updateOrder(data) {
+  return request({
+    url: '/assetorder/updateOrder',
+    method: 'post',
+    data: data
+  })
+}
 export function getOrderNum() {
   return request({
     url: '/assetorder/getOrderNum',
@@ -20,7 +27,12 @@ export function fetchList(params) {
   })
 }
 
-export function closeOrder(params) {
+export function updateGetOneOrder(params) {
+  return request({
+    url: '/assetorder/updateInfo/' + params,
+    method: 'get'
+  })
+} export function closeOrder(params) {
   return request({
     url: '/assetorder/update/close',
     method: 'post',
@@ -30,7 +42,7 @@ export function closeOrder(params) {
 
 export function deleteOrder(params) {
   return request({
-    url: '/assetorder/delete',
+    url: '/assetorder/deleteOrder',
     method: 'post',
     params: params
   })

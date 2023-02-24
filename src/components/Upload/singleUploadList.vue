@@ -5,29 +5,25 @@
       :data="useOss?dataObj:null"
       list-type="picture"
       :multiple="false"
-      :show-file-list="showFileList"
       :file-list="fileList"
+      :show-file-list="showFileList"
       :before-upload="beforeUpload"
-      :on-remove="handleRemove"
       :on-success="handleUploadSuccess"
-      :on-preview="handlePreview"
+      :on-remove="handleRemove"
+      accept=".png, .jpg"
       :limit="5"
       :on-exceed="handleExceed"
     >
       <el-button size="small" type="primary">点击上传</el-button>
       <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500KB</div>
     </el-upload>
-    <!--    <el-dialog :visible.sync="dialogVisible">
-      {{ fileList[0].name }}
-      <img width="100%" :src="fileList[0].url" alt="">
-    </el-dialog>-->
   </div>
 </template>
 <script>
 import { policy } from '@/api/oss'
 
 export default {
-  name: 'SingleUpload',
+  name: 'SingleUploadList',
   props: {
     value: String
   },
@@ -45,7 +41,8 @@ export default {
       dialogVisible: false,
       useOss: false, // 使用oss->true;使用MinIO->false
       ossUploadUrl: 'http://macro-oss.oss-cn-shenzhen.aliyuncs.com',
-      minioUploadUrl: process.env.BASE_API + '/minio/upload'
+      minioUploadUrl: process.env.BASE_API + '/minio/upload',
+      fileList: []
     }
   },
   computed: {
@@ -59,12 +56,7 @@ export default {
         return null
       }
     },
-    fileList() {
-      return [{
-        name: this.imageName,
-        url: this.imageUrl
-      }]
-    },
+
     showFileList: {
       get: function() {
         return this.value !== null && this.value !== '' && this.value !== undefined
@@ -73,6 +65,19 @@ export default {
       }
     }
   },
+  watch: {
+    imageUrl: function() {
+      this.fileList = []
+      if (this.value) {
+        const values = this.value.split(',')
+        for (let i = 0; i < values.length; i++) {
+          var name = values[i].substr(values[i].lastIndexOf('-') + 1)
+          this.fileList.push({ name: name, url: values[i] })
+        }
+      }
+    }
+  },
+
   methods: {
     handleExceed(files, fileList) {
       this.$message.warning(`当前限制选择 5 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`)
@@ -81,7 +86,21 @@ export default {
       this.$emit('input', val)
     },
     handleRemove(file, fileList) {
-      this.emitInput('')
+      for (let i = 0; i < fileList.length; i++) {
+        const uid = fileList[i].uid
+        if (uid === file.uid) {
+          fileList.splice(i, 1)
+          i--
+        }
+      }
+      var str = ''
+      for (let i = 0; i < fileList.length; i++) {
+        if (i !== 0) {
+          str = str + ','
+        }
+        str = str + fileList[i].url
+      }
+      this.emitInput(str)
     },
     handlePreview(file) {
       this.dialogVisible = true
@@ -103,22 +122,28 @@ export default {
           // _self.dataObj.callback = response.data.callback;
           resolve(true)
         }).catch(err => {
-          console.log(err)
           reject(false)
         })
       })
     },
     handleUploadSuccess(res, file) {
       this.showFileList = true
-      this.fileList.pop()
+      // this.fileList.pop()
       let url = this.dataObj.host + '/' + this.dataObj.dir + '/' + file.name
-      console.log(file)
       if (!this.useOss) {
         // 不使用oss直接获取图片路径
         url = res.data.url
       }
       this.fileList.push({ name: file.name, url: url })
-      this.emitInput(this.fileList[0].url)
+      var files = this.fileList
+      var str = ''
+      for (let i = 0; i < files.length; i++) {
+        if (i !== 0) {
+          str = str + ','
+        }
+        str = str + files[i].url
+      }
+      this.emitInput(str)
     }
   }
 }

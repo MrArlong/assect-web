@@ -88,7 +88,7 @@
         <el-table-column label="价格" width="200" align="center">
           <template slot-scope="scope">{{ scope.row.price }}</template>
         </el-table-column>
-        <el-table-column label="是否已租" width="150" align="center">
+        <!--        <el-table-column label="是否已租" width="150" align="center">
           <template slot-scope="scope">
             <el-switch
               v-model="scope.row.isOccupancy"
@@ -97,7 +97,7 @@
               @change="updateIsOy(scope.$index, scope.row)"
             />
           </template>
-        </el-table-column>
+        </el-table-column>-->
         <el-table-column label="展示状态" width="150" align="center">
           <template slot-scope="scope">
             <el-switch

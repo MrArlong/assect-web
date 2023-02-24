@@ -60,6 +60,11 @@
         </el-table-column>
         <el-table-column label="单价" width="190" align="center">
           <template slot-scope="scope">
+            {{ scope.row.unitprice }}
+          </template>
+        </el-table-column>
+        <el-table-column label="总价" width="190" align="center">
+          <template slot-scope="scope">
             {{ scope.row.price }}
           </template>
         </el-table-column>

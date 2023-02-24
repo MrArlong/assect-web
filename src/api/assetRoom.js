@@ -84,7 +84,7 @@ export function getBrand(id) {
 
 export function updateBrand(id, data) {
   return request({
-    url: '/assetFloot/update/' + id,
+    url: '/room/update/' + id,
     method: 'post',
     data: data
   })

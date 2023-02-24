@@ -37,6 +37,14 @@ export function updateFactoryStatus(data) {
   })
 }
 
+export function updateSftjStatus(data) {
+  return request({
+    url: '/assetFloot/update/sftjStatus',
+    method: 'post',
+    data: data
+  })
+}
+
 export function deleteBrand(id) {
   return request({
     url: '/assetFloot/delete/' + id,

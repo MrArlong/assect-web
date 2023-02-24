@@ -84,9 +84,9 @@
             <el-form-item
               label="楼层："
               :rules="[{ required: true, message: '请输入', trigger: 'change' }]"
-              prop="floor"
+              prop="floorNum"
             >
-              <el-select v-model="order_orderRoom.floor" filterable placeholder="请选择" @change="getFjList">
+              <el-select v-model="order_orderRoom.floorNum" filterable placeholder="请选择" @change="getFjList">
                 <el-option
                   v-for="item in lcList"
                   :key="item"
@@ -136,7 +136,13 @@
               />
             </el-form-item>
             <el-form-item
-              label="价格："
+              label="单价："
+              :rules="[{ required: true, message: '请输入', trigger: 'change' }]"
+              prop="unitprice"
+            >
+              <el-input v-model="order_orderRoom.unitprice" />
+            </el-form-item> <el-form-item
+              label="总价："
               :rules="[{ required: true, message: '请输入', trigger: 'change' }]"
               prop="price"
             >
@@ -161,7 +167,7 @@
 
         <el-table
           ref="orderItemTable"
-          :data="order.orderRoom"
+          :data="orderRoom"
           style="width: 100%;margin-top: 20px"
           border
         >
@@ -172,7 +178,7 @@
           </el-table-column>
           <el-table-column label="楼层" width="170" align="center">
             <template slot-scope="scope">
-              {{ scope.row.floor }}
+              {{ scope.row.floorNum }}
             </template>
           </el-table-column>
           <el-table-column label="房间号" width="170" align="center">
@@ -191,6 +197,11 @@
             </template>
           </el-table-column>
           <el-table-column label="单价" width="170" align="center">
+            <template slot-scope="scope">
+              {{ scope.row.unitprice }}
+            </template>
+          </el-table-column>
+          <el-table-column label="总价" width="170" align="center">
             <template slot-scope="scope">
               {{ scope.row.price }}
             </template>
@@ -224,15 +235,14 @@ import {
   getOrderDetail,
   updateReceiverInfo,
   updateMoneyInfo,
-  closeOrder,
-  updateOrderNote,
   deleteOrder,
-  getOrderNum
+  getOrderNum, createOrder, getOrderRoomDetail, updateOrder
 } from '@/api/assetOrder'
 import { formatDate } from '@/utils/date'
 import { getAssetFjList, getAssetFloorList, getAssetLcList } from '@/api/assetRoom'
-import { createOrder } from '@/api/assetOrder'
+import { updateBrand } from '@/api/assetFloot'
 const defaultOrder = {
+  id: null,
   orderNum: null,
   orderType: null,
   czr: null,
@@ -241,25 +251,32 @@ const defaultOrder = {
   zlrlxdh: null,
   zfsj: null,
   zffs: null,
-  zje: 0,
-  orderRoom: []
+  zje: null
 }
 export default {
   name: 'OrderDetail',
   components: { },
   filters: { },
+  props: {
+    isEdit: {
+      type: Boolean,
+      default: false
+    }
+  },
   data() {
     return {
       order: Object.assign({}, defaultOrder),
+      orderRoom: [],
       order_orderRoom: {
         floorId: '',
         floorName: '',
-        floor: '',
+        floorNum: '',
         roomId: '',
         roomNum: '',
         beginTime: '',
         endTime: '',
-        price: 0
+        price: null,
+        unitprice: ''
       },
       id: null,
       receiverDialogVisible: false,
@@ -278,12 +295,28 @@ export default {
   },
   created() {
     this.order.orderRoom = []
+    if (this.isEdit) {
+      this.initUpdate()
+    } else {
+      this.getOrderNum()
+      this.order = Object.assign({}, defaultOrder)
+    }
     this.getFloorList()
     this.getLcList()
     this.getFjList()
-    this.getOrderNum()
   },
   methods: {
+    async initUpdate() {
+      this.id = this.list = this.$route.query.id
+
+      await getOrderDetail(this.id).then(response => {
+        this.order = response.data
+      })
+
+      await getOrderRoomDetail(this.id).then(res => {
+        this.orderRoom = res.data
+      })
+    },
     fjSet(roomId) {
       const fj = this.fjList.find((item) => item.value === roomId)
 
@@ -297,17 +330,30 @@ export default {
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            createOrder(this.order).then(response => {
-              this.$refs[formName].resetFields()
-              this.order = Object.assign({}, defaultOrder)
-              this.$message({
-                message: '提交成功',
-                type: 'success',
-                duration: 1000
+            this.order.orderRoom = this.orderRoom
+            if (this.isEdit) {
+              updateOrder(this.order).then(response => {
+                this.$refs[formName].resetFields()
+                this.$message({
+                  message: '修改成功',
+                  type: 'success',
+                  duration: 1000
+                })
+                this.$router.back()
               })
-              this.$router.back()
-            //  this.$router.push({ path: '/asset/orderForm' })
-            })
+            } else {
+              createOrder(this.order).then(response => {
+                this.$refs[formName].resetFields()
+                this.order = Object.assign({}, defaultOrder)
+                this.$message({
+                  message: '提交成功',
+                  type: 'success',
+                  duration: 1000
+                })
+                this.$router.back()
+                //  this.$router.push({ path: '/asset/orderForm' })
+              })
+            }
           })
         } else {
           this.$message({
@@ -320,22 +366,23 @@ export default {
       })
     },
     delBtn(rowIndex) {
-      this.order.zje = ((this.order.zje * 100 - this.order.orderRoom[rowIndex].price * 100) / 100).toFixed(3)
-      this.$delete(this.order.orderRoom, rowIndex)
+      this.order.zje = ((this.order.zje * 100 - this.orderRoom[rowIndex].price * 100) / 100).toFixed(3)
+      this.$delete(this.orderRoom, rowIndex)
     },
     saveOrderRoom() {
       this.$refs.form3.validate(async(valid) => {
         if (valid) {
-          this.order.orderRoom.push(
+          this.orderRoom.push(
             {
               floorName: this.order_orderRoom.floorName,
               floorId: this.order_orderRoom.floorId,
-              floor: this.order_orderRoom.floor,
+              floorNum: this.order_orderRoom.floorNum,
               roomNum: this.order_orderRoom.roomNum,
               roomId: this.order_orderRoom.roomId,
               beginTime: this.order_orderRoom.beginTime,
               endTime: this.order_orderRoom.endTime,
-              price: this.order_orderRoom.price
+              price: this.order_orderRoom.price,
+              unitprice: this.order_orderRoom.unitprice
             }
           )
           this.orderRoomDialog = false
@@ -361,7 +408,7 @@ export default {
     getLcList() {
       this.lcList = []
       this.fjList = []
-      this.order_orderRoom.floor = ''
+      this.order_orderRoom.floorNum = ''
       this.order_orderRoom.roomId = ''
       const floorId = this.order_orderRoom.floorId
       if (floorId) {
@@ -380,7 +427,7 @@ export default {
       this.fjList = []
       this.order_orderRoom.roomId = ''
       const floorId = this.order_orderRoom.floorId
-      const floor = this.order_orderRoom.floor
+      const floor = this.order_orderRoom.floorNum
       const params = new URLSearchParams()
       params.append('floorId', floorId)
       params.append('floor', floor)
@@ -509,53 +556,10 @@ export default {
       this.closeInfo.note = null
       this.closeInfo.id = this.id
     },
-    handleCloseOrder() {
-      this.$confirm('是否要关闭?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        const params = new URLSearchParams()
-        params.append('ids', [this.closeInfo.id])
-        params.append('note', this.closeInfo.note)
-        closeOrder(params).then(response => {
-          this.closeDialogVisible = false
-          this.$message({
-            type: 'success',
-            message: '订单关闭成功!'
-          })
-          getOrderDetail(this.id).then(response => {
-            this.order = response.data
-          })
-        })
-      })
-    },
     showMarkOrderDialog() {
       this.markOrderDialogVisible = true
       this.markInfo.id = this.id
       this.closeOrder.note = null
-    },
-    handleMarkOrder() {
-      this.$confirm('是否要备注订单?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        const params = new URLSearchParams()
-        params.append('id', this.markInfo.id)
-        params.append('note', this.markInfo.note)
-        params.append('status', this.order.status)
-        updateOrderNote(params).then(response => {
-          this.markOrderDialogVisible = false
-          this.$message({
-            type: 'success',
-            message: '订单备注成功!'
-          })
-          getOrderDetail(this.id).then(response => {
-            this.order = response.data
-          })
-        })
-      })
     },
     handleDeleteOrder() {
       this.$confirm('是否要进行该删除操作?', '提示', {

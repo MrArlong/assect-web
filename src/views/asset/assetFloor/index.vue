@@ -52,25 +52,35 @@
         <el-table-column label="所属地区" width="150" align="center">
           <template slot-scope="scope">{{ scope.row.region }}</template>
         </el-table-column>
-        <el-table-column label="毛坯价格" width="150" align="center">
+        <!--        <el-table-column label="毛坯价格" width="150" align="center">
           <template slot-scope="scope"><span v-if="scope.row.price">{{ scope.row.price }}元/月</span></template>
         </el-table-column>
         <el-table-column label="精装价格" width="150" align="center">
           <template slot-scope="scope"><span v-if="scope.row.price">{{ scope.row.jzprice }}元/月</span></template>
-        </el-table-column>
-        <el-table-column label="联系人" width="150" align="center">
+        </el-table-column>-->
+        <el-table-column label="联系人" width="130" align="center">
           <template slot-scope="scope">{{ scope.row.lxr }}</template>
         </el-table-column>
-        <el-table-column label="联系电话" width="150" align="center">
+        <el-table-column label="联系电话" width="130" align="center">
           <template slot-scope="scope">{{ scope.row.lxdh }}</template>
         </el-table-column>
-        <el-table-column label="展示状态" width="150" align="center">
+        <el-table-column label="展示状态" width="130" align="center">
           <template slot-scope="scope">
             <el-switch
               v-model="scope.row.zszt"
               :active-value="'1'"
               :inactive-value="'0'"
               @change="handleFactoryStatusChange(scope.$index, scope.row)"
+            />
+          </template>
+        </el-table-column>
+        <el-table-column label="热门出租" width="130" align="center">
+          <template slot-scope="scope">
+            <el-switch
+              v-model="scope.row.sftj"
+              :active-value="'1'"
+              :inactive-value="'0'"
+              @change="handleSftjStatusChange(scope.$index, scope.row)"
             />
           </template>
         </el-table-column>
@@ -125,7 +135,7 @@
   </div>
 </template>
 <script>
-import { fetchList, updateShowStatus, updateFactoryStatus, deleteBrand } from '@/api/assetFloot'
+import { fetchList, updateShowStatus, updateFactoryStatus, deleteBrand, updateSftjStatus } from '@/api/assetFloot'
 
 export default {
   name: 'BrandList',
@@ -214,6 +224,27 @@ export default {
         }
       })
     },
+
+    handleSftjStatusChange(index, row) {
+      var data = new URLSearchParams()
+      data.append('ids', row.id)
+      data.append('sftj', row.sftj)
+      updateSftjStatus(data).then(response => {
+        this.$message({
+          message: '修改成功',
+          type: 'success',
+          duration: 1000
+        })
+      }).catch(error => {
+        console.log(error)
+        if (row.zszt === 0) {
+          row.zszt = 1
+        } else {
+          row.zszt = 0
+        }
+      })
+    },
+
     handleShowStatusChange(index, row) {
       const data = new URLSearchParams()
 
