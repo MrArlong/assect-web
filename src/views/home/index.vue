@@ -19,10 +19,10 @@
             <div class="layout-title">房间总览</div>
             <div style="padding: 40px">
               <el-row>
-                <el-col :span="6" class="color-danger overview-item-value">100</el-col>
-                <el-col :span="6" class="color-danger overview-item-value">400</el-col>
-                <el-col :span="6" class="color-danger overview-item-value">50</el-col>
-                <el-col :span="6" class="color-danger overview-item-value">500</el-col>
+                <el-col :span="6" class="color-danger overview-item-value">{{ this.roomZl.below }}</el-col>
+                <el-col :span="6" class="color-danger overview-item-value">{{ this.roomZl.up }}</el-col>
+                <el-col :span="6" class="color-danger overview-item-value">{{ this.roomZl.cz }}</el-col>
+                <el-col :span="6" class="color-danger overview-item-value">{{ this.roomZl.sum }}</el-col>
               </el-row>
               <el-row class="font-medium">
                 <el-col :span="6" class="overview-item-title">已下架</el-col>
@@ -38,10 +38,10 @@
             <div class="layout-title">订单总览</div>
             <div style="padding: 40px">
               <el-row>
-                <el-col :span="6" class="color-danger overview-item-value">100</el-col>
-                <el-col :span="6" class="color-danger overview-item-value">200</el-col>
-                <el-col :span="6" class="color-danger overview-item-value">1000</el-col>
-                <el-col :span="6" class="color-danger overview-item-value">5000</el-col>
+                <el-col :span="6" class="color-danger overview-item-value">{{ this.roomZl.jrxz }}</el-col>
+                <el-col :span="6" class="color-danger overview-item-value">{{ this.roomZl.zrxz }}</el-col>
+                <el-col :span="6" class="color-danger overview-item-value">{{ this.roomZl.byxz }}</el-col>
+                <el-col :span="6" class="color-danger overview-item-value">{{ this.roomZl.zs }}</el-col>
               </el-row>
               <el-row class="font-medium">
                 <el-col :span="6" class="overview-item-title">今日新增</el-col>
@@ -61,35 +61,35 @@
           <div style="padding: 20px">
             <div>
               <div style="color: #909399;font-size: 14px">本月订单总数</div>
-              <div style="color: #606266;font-size: 24px;padding: 10px 0">10000</div>
-              <div>
+              <div style="color: #606266;font-size: 24px;padding: 10px 0">{{ this.roomZl.byxz }}</div>
+              <!--              <div>
                 <span class="color-success" style="font-size: 14px">+10%</span>
                 <span style="color: #C0C4CC;font-size: 14px">同比上月</span>
-              </div>
+              </div>-->
             </div>
             <div style="margin-top: 20px;">
               <div style="color: #909399;font-size: 14px">本周订单总数</div>
-              <div style="color: #606266;font-size: 24px;padding: 10px 0">1000</div>
-              <div>
+              <div style="color: #606266;font-size: 24px;padding: 10px 0">{{ this.roomZl.bzxz }}</div>
+              <!--              <div>
                 <span class="color-danger" style="font-size: 14px">-10%</span>
                 <span style="color: #C0C4CC;font-size: 14px">同比上周</span>
-              </div>
+              </div>-->
             </div>
             <div style="margin-top: 20px;">
               <div style="color: #909399;font-size: 14px">本月销售总额</div>
-              <div style="color: #606266;font-size: 24px;padding: 10px 0">100000</div>
-              <div>
+              <div style="color: #606266;font-size: 24px;padding: 10px 0">{{ this.roomZl.bydde }}</div>
+              <!--              <div>
                 <span class="color-success" style="font-size: 14px">+10%</span>
                 <span style="color: #C0C4CC;font-size: 14px">同比上月</span>
-              </div>
+              </div>-->
             </div>
             <div style="margin-top: 20px;">
               <div style="color: #909399;font-size: 14px">本周销售总额</div>
-              <div style="color: #606266;font-size: 24px;padding: 10px 0">50000</div>
-              <div>
+              <div style="color: #606266;font-size: 24px;padding: 10px 0">{{ this.roomZl.bzdde }}</div>
+              <!--              <div>
                 <span class="color-danger" style="font-size: 14px">-10%</span>
                 <span style="color: #C0C4CC;font-size: 14px">同比上周</span>
-              </div>
+              </div>-->
             </div>
           </div>
         </el-col>
@@ -129,31 +129,29 @@ import { str2Date } from '@/utils/date'
 import img_home_order from '@/assets/images/home_order.png'
 import img_home_today_amount from '@/assets/images/home_today_amount.png'
 import img_home_yesterday_amount from '@/assets/images/home_yesterday_amount.png'
-import { getAssetFloorList, getLqyjList } from '@/api/assetRoom'
+import { getAssetFloorList, getLqyjList, homeRoomSum, orderTj } from '@/api/assetRoom'
 const DATA_FROM_BACKEND = {
   columns: ['date', 'orderCount', 'orderAmount'],
   rows: [
-    { date: '2023-02-01', orderCount: 10, orderAmount: 1093 },
-    { date: '2023-02-02', orderCount: 20, orderAmount: 2230 },
-    { date: '2023-02-03', orderCount: 33, orderAmount: 3623 },
-    { date: '2023-02-04', orderCount: 50, orderAmount: 6423 },
-    { date: '2023-02-05', orderCount: 80, orderAmount: 8492 },
-    { date: '2023-02-06', orderCount: 60, orderAmount: 6293 },
-    { date: '2023-02-07', orderCount: 20, orderAmount: 2293 },
-    { date: '2023-02-08', orderCount: 60, orderAmount: 6293 },
-    { date: '2023-02-09', orderCount: 50, orderAmount: 5293 },
-    { date: '2023-02-10', orderCount: 30, orderAmount: 3293 },
-    { date: '2023-02-11', orderCount: 20, orderAmount: 2293 },
-    { date: '2023-02-12', orderCount: 80, orderAmount: 8293 },
-    { date: '2023-02-13', orderCount: 100, orderAmount: 10293 },
-    { date: '2023-02-14', orderCount: 10, orderAmount: 1293 },
-    { date: '2023-02-15', orderCount: 40, orderAmount: 4293 }
   ]
 }
 export default {
   name: 'Home',
   data() {
     return {
+      roomZl: {
+        sum: 0,
+        below: 0,
+        up: 0,
+        cz: 0,
+        jrxz: 0,
+        zrxz: 0,
+        byxz: 0,
+        zs: 0,
+        bzxz: 0,
+        bydde: 0,
+        bzdde: 0
+      },
       pickerOptions: {
         shortcuts: [{
           text: '最近一周',
@@ -202,8 +200,10 @@ export default {
   created() {
     this.initOrderCountDate()
     this.getData()
-    this.getFloorList()
+    //  this.getFloorList()
     this.getList()
+    this.getRoomZl()
+    this.orderTj()
   },
   methods: {
     getFloorList() {
@@ -222,16 +222,46 @@ export default {
         this.total = response.data.total
       })
     },
+    getRoomZl() {
+      this.listLoading = true
+      homeRoomSum().then(res => {
+        this.roomZl.below = res.data.below
+        this.roomZl.cz = res.data.cz
+        this.roomZl.sum = res.data.sum
+        this.roomZl.up = res.data.up
+        this.roomZl.jrxz = res.data.jrxz
+        this.roomZl.zrxz = res.data.zrxz
+        this.roomZl.byxz = res.data.byxz
+        this.roomZl.zs = res.data.zs
+        this.roomZl.bydde = res.data.bydde
+        this.roomZl.bzxz = res.data.bzxz
+        this.roomZl.bzdde = res.data.bzdde
+      })
+    },
+    orderTj() {
+      const params = new URLSearchParams()
+      params.append('beginTime', this.orderCountDate[0])
+      params.append('endTime', this.orderCountDate[1])
+      orderTj(params).then(res => {
+        DATA_FROM_BACKEND.rows = res.data
+        this.chartData.rows = res.data
+      })
+    },
     handleDateChange() {
-      this.getData()
+      this.orderTj()
     },
     initOrderCountDate() {
-      const start = new Date()
-      start.setFullYear(2023)
+      const date = new Date()
+      const year = date.getFullYear()
+      const month = date.getMonth() + 1
+      const day = date.getDate()
+      const endStr = year + '-' + month + '-' + day
+      const end = new Date(endStr)
+      /* start.setFullYear(2023)
       start.setMonth(1)
-      start.setDate(1)
-      const end = new Date()
-      end.setTime(start.getTime() + 1000 * 60 * 60 * 24 * 7)
+      start.setDate(1)*/
+      const start = new Date()
+      start.setTime(end.getTime() - 1000 * 60 * 60 * 24 * 7)
       this.orderCountDate = [start, end]
     },
     getData() {

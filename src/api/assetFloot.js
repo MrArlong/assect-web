@@ -14,9 +14,24 @@ export function fetchList(params) {
     params: params
   })
 }
+export function fetchGgList(params) {
+  return request({
+    url: '/assetGgimg/list',
+    method: 'get',
+    params: params
+  })
+}
 export function createBrand(data) {
   return request({
     url: '/assetFloot/create',
+    method: 'post',
+    data: data
+  })
+}
+
+export function createGgBrand(data) {
+  return request({
+    url: '/assetGgimg/create',
     method: 'post',
     data: data
   })
@@ -32,6 +47,14 @@ export function updateShowStatus(data) {
 export function updateFactoryStatus(data) {
   return request({
     url: '/assetFloot/update/factoryStatus',
+    method: 'post',
+    data: data
+  })
+}
+
+export function updateGgimgFactoryStatus(data) {
+  return request({
+    url: '/assetGgimg/update/factoryStatus',
     method: 'post',
     data: data
   })
@@ -59,9 +82,24 @@ export function getBrand(id) {
   })
 }
 
+export function getGgimgBrand(id) {
+  return request({
+    url: '/assetGgimg/' + id,
+    method: 'get'
+  })
+}
+
 export function updateBrand(id, data) {
   return request({
     url: '/assetFloot/update/' + id,
+    method: 'post',
+    data: data
+  })
+}
+
+export function updateGgimgBrand(id, data) {
+  return request({
+    url: '/assetGgimg/update/' + id,
     method: 'post',
     data: data
   })

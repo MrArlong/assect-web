@@ -8,6 +8,22 @@ export function getLqyjList(params) {
     params: params
   })
 }
+// 房间总览
+export function homeRoomSum() {
+  return request({
+    url: '/room/homeRoomSum',
+    method: 'get'
+  })
+}
+
+// 订单统计
+export function orderTj(params) {
+  return request({
+    url: '/room/orderTj',
+    method: 'get',
+    params: params
+  })
+}
 
 export function getAssetFloorList(params) {
   return request({

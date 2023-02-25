@@ -62,6 +62,25 @@ export const asyncRouterMap = [
       meta: { title: '编辑资产' },
       hidden: true
     }, {
+      path: 'assetGgimg',
+      name: 'assetGgimg',
+      component: () => import('@/views/asset/assetGgimg/index'),
+      meta: { title: '首页配置', icon: 'asset-floor' }
+    },
+    {
+      path: 'addGgimg',
+      name: 'addGgimg',
+      component: () => import('@/views/asset/assetGgimg/add'),
+      meta: { title: '添加轮播图' },
+      hidden: true
+    },
+    {
+      path: 'updateGgimg',
+      name: 'updateGgimg',
+      component: () => import('@/views/asset/assetGgimg/update'),
+      meta: { title: '编辑轮播图' },
+      hidden: true
+    }, {
       path: 'room',
       name: 'room',
       component: () => import('@/views/asset/room/index'),
