@@ -200,6 +200,7 @@ export default {
           type: 'success',
           duration: 1000
         })
+        this.getList()
       }).catch(error => {
         console.log(error)
         if (row.zszt === 0) {
