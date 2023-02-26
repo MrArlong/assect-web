@@ -75,6 +75,13 @@ export function deleteBrand(id) {
   })
 }
 
+export function deleteGgBrand(id) {
+  return request({
+    url: '/assetGgimg/delete/' + id,
+    method: 'get'
+  })
+}
+
 export function getBrand(id) {
   return request({
     url: '/assetFloot/' + id,

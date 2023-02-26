@@ -184,7 +184,7 @@ export default {
       this.$router.push({ path: '/asset/updateBrand', query: { id: row.id }})
     },
     handleDelete(index, row) {
-      this.$confirm('是否要删除该品牌', '提示', {
+      this.$confirm('是否要删除该数据', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'

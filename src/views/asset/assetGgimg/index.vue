@@ -111,7 +111,7 @@ import {
   updateShowStatus,
   deleteBrand,
   updateSftjStatus,
-  fetchGgList, updateGgimgFactoryStatus
+  fetchGgList, updateGgimgFactoryStatus, deleteGgBrand
 } from '@/api/assetFloot'
 
 export default {
@@ -169,12 +169,12 @@ export default {
       this.$router.push({ path: '/asset/updateGgimg', query: { id: row.id }})
     },
     handleDelete(index, row) {
-      this.$confirm('是否要删除该品牌', '提示', {
+      this.$confirm('是否要删除该数据', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        deleteBrand(row.id).then(response => {
+        deleteGgBrand(row.id).then(response => {
           this.$message({
             message: '删除成功',
             type: 'success',

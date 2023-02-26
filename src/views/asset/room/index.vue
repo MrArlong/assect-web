@@ -41,6 +41,7 @@
     <el-card class="operate-container" shadow="never">
       <i class="el-icon-tickets" />
       <span>数据列表</span>
+
       <el-button
         class="btn-add"
         size="mini"
@@ -48,6 +49,7 @@
       >
         添加
       </el-button>
+
     </el-card>
     <div class="table-container">
       <el-table
@@ -88,7 +90,7 @@
         <el-table-column label="价格" width="200" align="center">
           <template slot-scope="scope">{{ scope.row.price }}</template>
         </el-table-column>
-        <!--        <el-table-column label="是否已租" width="150" align="center">
+        <el-table-column label="是否已租" width="150" align="center">
           <template slot-scope="scope">
             <el-switch
               v-model="scope.row.isOccupancy"
@@ -97,7 +99,7 @@
               @change="updateIsOy(scope.$index, scope.row)"
             />
           </template>
-        </el-table-column>-->
+        </el-table-column>
         <el-table-column label="展示状态" width="150" align="center">
           <template slot-scope="scope">
             <el-switch
@@ -143,7 +145,7 @@
   </div>
 </template>
 <script>
-import { fetchList, getAssetFloorList, updateIsOccupancy } from '@/api/assetRoom'
+import { downloadExcel, fetchList, getAssetFloorList, updateIsOccupancy } from '@/api/assetRoom'
 import { updateFactoryStatus, deleteBrand } from '@/api/assetRoom'
 
 const defaultListQuery = {
@@ -313,6 +315,21 @@ export default {
     },
     handleAddProduct() {
       this.$router.push({ path: '/asset/addRoom' })
+    },
+
+    downloadExcel1() {
+      downloadExcel().then(res => {
+        /* const blob = new Blob([res])
+        const url = window.URL.createObjectURL(blob)
+        const dom = document.createElement('a')
+        dom.style.display = 'none'
+        dom.href = url
+        dom.setAttribute('download', '值班数据' + '.' + 'xlsx')
+        document.body.appendChild(dom)
+        dom.click()*/
+      }).catch((err) => {
+        console.log(err)
+      })
     },
     handleBatchOperate() {
       if (this.operateType == null) {

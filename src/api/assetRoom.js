@@ -53,6 +53,15 @@ export function fetchList(params) {
     params: params
   })
 }
+
+export function downloadExcel(params) {
+  return request({
+    url: '/room/exportExcel',
+    method: 'get',
+    params,
+    responseType: 'blob'
+  })
+}
 export function createBrand(data) {
   return request({
     url: '/room/create',
