@@ -100,24 +100,6 @@
             />
           </template>
         </el-table-column>
-        <!--        <el-table-column label="相关" width="220" align="center">
-          <template slot-scope="scope">
-            <span>商品：</span>
-            <el-button
-              size="mini"
-              type="text"
-              @click="getProductList(scope.$index, scope.row)"
-            >100
-            </el-button>
-            <span>评价：</span>
-            <el-button
-              size="mini"
-              type="text"
-              @click="getProductCommentList(scope.$index, scope.row)"
-            >1000
-            </el-button>
-          </template>
-        </el-table-column>-->
         <el-table-column label="操作" width="200" align="center">
           <template slot-scope="scope">
             <el-button

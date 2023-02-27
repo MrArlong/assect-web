@@ -109,7 +109,6 @@
 <script>
 import {
   updateShowStatus,
-  deleteBrand,
   updateSftjStatus,
   fetchGgList, updateGgimgFactoryStatus, deleteGgBrand
 } from '@/api/assetFloot'

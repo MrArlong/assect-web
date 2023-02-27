@@ -49,6 +49,14 @@
       >
         导出订单
       </el-button>
+      <el-button
+        class="btn-add"
+        style="margin-right: 10px"
+        size="mini"
+        @click="importExcel()"
+      >
+        导入订单
+      </el-button>
     </el-card>
     <div class="table-container">
       <el-table
@@ -110,11 +118,45 @@
         @current-change="handleCurrentChange"
       />
     </div>
+    <!-- bpmn20.xml导入对话框 -->
+    <el-dialog
+      :title="upload.title"
+      :visible.sync="upload.open"
+      width="500px"
+      append-to-body
+    >
+      <el-upload
+        ref="upload"
+        :limit="1"
+        accept=".xlsx"
+        :action="upload.url"
+        :headers="upload.headers"
+        :disabled="upload.isUploading"
+        :on-progress="handleFileUploadProgress"
+        :on-success="handleFileSuccess"
+        :on-error="handleFileUploadError"
+        :auto-upload="false"
+        drag
+      >
+        <i class="el-icon-upload" />
+        <div class="el-upload__text">
+          <em>点击上传</em>
+        </div>
+        <div slot="tip" class="el-upload__tip" style="color: red">
+          提示：仅允许导入“.xlsx”格式文件！
+        </div>
+      </el-upload>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitFileForm">确 定</el-button>
+        <el-button @click="upload.open = false">取 消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
 import { fetchList, closeOrder, deleteOrder, downloadExcel } from '@/api/assetOrder'
 import { formatDate } from '@/utils/date'
+import { getToken } from '@/utils/auth'
 const defaultListQuery = {
   pageNum: 1,
   pageSize: 10,
@@ -147,68 +189,49 @@ export default {
         content: null,
         orderIds: []
       },
-      statusOptions: [
-        {
-          label: '待付款',
-          value: 0
-        },
-        {
-          label: '待发货',
-          value: 1
-        },
-        {
-          label: '已发货',
-          value: 2
-        },
-        {
-          label: '已完成',
-          value: 3
-        },
-        {
-          label: '已关闭',
-          value: 4
-        }
-      ],
-      orderTypeOptions: [
-        {
-          label: '正常订单',
-          value: 0
-        },
-        {
-          label: '秒杀订单',
-          value: 1
-        }
-      ],
-      sourceTypeOptions: [
-        {
-          label: 'PC订单',
-          value: 0
-        },
-        {
-          label: 'APP订单',
-          value: 1
-        }
-      ],
-      operateOptions: [
-        {
-          label: '批量发货',
-          value: 1
-        },
-        {
-          label: '关闭订单',
-          value: 2
-        },
-        {
-          label: '删除订单',
-          value: 3
-        }
-      ]
+      upload: {
+        // 是否显示弹出层（导入）
+        open: false,
+        // 弹出层标题（导入）
+        title: '',
+        // 是否禁用上传
+        isUploading: false,
+        // 设置上传的请求头部
+        headers: { Authorization: getToken() },
+        // 上传的地址
+        url: process.env.BASE_API + '/assetorder/importExcel'
+      }
     }
   },
   created() {
     this.getList()
   },
   methods: {
+    // 文件上传中处理
+    handleFileUploadProgress(event, file, fileList) {
+      this.upload.isUploading = true
+    },
+    handleFileUploadError(event, file, fileList) {
+      this.upload.isUploading = false
+    },
+    // 文件上传成功处理
+    handleFileSuccess(response, file, fileList) {
+      this.upload.open = false
+      this.upload.isUploading = false
+      this.$refs.upload.clearFiles()
+      this.$message(response.message)
+      this.getList()
+    },
+    // 提交上传文件
+    submitFileForm() {
+      this.$refs.upload.submit()
+    },
+    importExcel() {
+      this.upload.title = '订单文件导入'
+      this.upload.name = null
+      this.upload.category = null
+      this.upload.open = true
+    },
     downloadExcel1() {
       this.$message({
         message: '正在导出请稍后！',
