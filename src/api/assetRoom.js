@@ -58,7 +58,7 @@ export function downloadExcel(params) {
   return request({
     url: '/room/exportExcel',
     method: 'get',
-    params,
+    params: params,
     responseType: 'blob'
   })
 }

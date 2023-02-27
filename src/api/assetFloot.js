@@ -14,6 +14,15 @@ export function fetchList(params) {
     params: params
   })
 }
+
+export function downloadExcel(params) {
+  return request({
+    url: '/assetFloot/exportExcel',
+    method: 'get',
+    params: params,
+    responseType: 'blob'
+  })
+}
 export function fetchGgList(params) {
   return request({
     url: '/assetGgimg/list',

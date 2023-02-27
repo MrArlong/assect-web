@@ -31,6 +31,22 @@
       >
         添加
       </el-button>
+      <el-button
+        class="btn-add"
+        style="margin-right: 10px"
+        size="mini"
+        @click="downloadExcel1()"
+      >
+        导出资产
+      </el-button>
+      <el-button
+        class="btn-add"
+        style="margin-right: 10px"
+        size="mini"
+        @click="importExcel()"
+      >
+        导入资产
+      </el-button>
     </el-card>
     <div class="table-container">
       <el-table
@@ -132,11 +148,44 @@
         @current-change="handleCurrentChange"
       />
     </div>
+    <!-- bpmn20.xml导入对话框 -->
+    <el-dialog
+      :title="upload.title"
+      :visible.sync="upload.open"
+      width="500px"
+      append-to-body
+    >
+      <el-upload
+        ref="upload"
+        :limit="1"
+        accept=".xlsx"
+        :action="upload.url"
+        :headers="upload.headers"
+        :disabled="upload.isUploading"
+        :on-progress="handleFileUploadProgress"
+        :on-success="handleFileSuccess"
+        :on-error="handleFileUploadError"
+        :auto-upload="false"
+        drag
+      >
+        <i class="el-icon-upload" />
+        <div class="el-upload__text">
+          <em>点击上传</em>
+        </div>
+        <div slot="tip" class="el-upload__tip" style="color: red">
+          提示：仅允许导入“.xlsx”格式文件！
+        </div>
+      </el-upload>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitFileForm">确 定</el-button>
+        <el-button @click="upload.open = false">取 消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
-import { fetchList, updateShowStatus, updateFactoryStatus, deleteBrand, updateSftjStatus } from '@/api/assetFloot'
-
+import { fetchList, updateShowStatus, updateFactoryStatus, deleteBrand, updateSftjStatus, downloadExcel } from '@/api/assetFloot'
+import { getToken } from '@/utils/auth'
 export default {
   name: 'BrandList',
   data() {
@@ -160,13 +209,70 @@ export default {
       list: null,
       total: null,
       listLoading: true,
-      multipleSelection: []
+      multipleSelection: [],
+      // bpmn.xml 导入
+      upload: {
+        // 是否显示弹出层（导入）
+        open: false,
+        // 弹出层标题（导入）
+        title: '',
+        // 是否禁用上传
+        isUploading: false,
+        // 设置上传的请求头部
+        headers: { Authorization: getToken() },
+        // 上传的地址
+        url: process.env.BASE_API + '/assetFloot/importExcel'
+      }
     }
   },
   created() {
     this.getList()
   },
   methods: {
+    // 文件上传中处理
+    handleFileUploadProgress(event, file, fileList) {
+      this.upload.isUploading = true
+    },
+    handleFileUploadError(event, file, fileList) {
+      this.upload.isUploading = false
+    },
+    // 文件上传成功处理
+    handleFileSuccess(response, file, fileList) {
+      this.upload.open = false
+      this.upload.isUploading = false
+      this.$refs.upload.clearFiles()
+      this.$message(response.message)
+      this.getList()
+    },
+    // 提交上传文件
+    submitFileForm() {
+      this.$refs.upload.submit()
+    },
+    importExcel() {
+      this.upload.title = '资产文件导入'
+      this.upload.name = null
+      this.upload.category = null
+      this.upload.open = true
+    },
+    downloadExcel1() {
+      this.$message({
+        message: '正在导出请稍后！',
+        type: 'success',
+        duration: 5000
+      })
+      downloadExcel(this.listQuery).then(res => {
+        const blob = new Blob([res])
+        const url = window.URL.createObjectURL(blob)
+        const dom = document.createElement('a')
+        dom.style.display = 'none'
+        dom.href = url
+        dom.setAttribute('download', '资产数据' + new Date().getTime() + '.' + 'xlsx')
+        document.body.appendChild(dom)
+        dom.click()
+      }).catch(err => {
+        console.log(err)
+      })
+    },
     getList() {
       this.listLoading = true
       fetchList(this.listQuery).then(response => {

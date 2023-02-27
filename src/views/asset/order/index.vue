@@ -41,6 +41,14 @@
       >
         添加
       </el-button>
+      <el-button
+        class="btn-add"
+        style="margin-right: 10px"
+        size="mini"
+        @click="downloadExcel1()"
+      >
+        导出订单
+      </el-button>
     </el-card>
     <div class="table-container">
       <el-table
@@ -105,7 +113,7 @@
   </div>
 </template>
 <script>
-import { fetchList, closeOrder, deleteOrder } from '@/api/assetOrder'
+import { fetchList, closeOrder, deleteOrder, downloadExcel } from '@/api/assetOrder'
 import { formatDate } from '@/utils/date'
 const defaultListQuery = {
   pageNum: 1,
@@ -201,6 +209,25 @@ export default {
     this.getList()
   },
   methods: {
+    downloadExcel1() {
+      this.$message({
+        message: '正在导出请稍后！',
+        type: 'success',
+        duration: 5000
+      })
+      downloadExcel(this.listQuery).then(res => {
+        const blob = new Blob([res])
+        const url = window.URL.createObjectURL(blob)
+        const dom = document.createElement('a')
+        dom.style.display = 'none'
+        dom.href = url
+        dom.setAttribute('download', '订单数据' + new Date().getTime() + '.' + 'xlsx')
+        document.body.appendChild(dom)
+        dom.click()
+      }).catch(err => {
+        console.log(err)
+      })
+    },
     handleUpdate(index, row) {
       this.$router.push({ path: '/asset/updateOrder', query: { id: row.id }})
     },

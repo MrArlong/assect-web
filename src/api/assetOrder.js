@@ -27,6 +27,15 @@ export function fetchList(params) {
   })
 }
 
+export function downloadExcel(params) {
+  return request({
+    url: '/assetorder/exportExcel',
+    method: 'get',
+    params: params,
+    responseType: 'blob'
+  })
+}
+
 export function updateGetOneOrder(params) {
   return request({
     url: '/assetorder/updateInfo/' + params,
