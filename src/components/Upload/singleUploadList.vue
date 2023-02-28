@@ -11,7 +11,7 @@
       :on-success="handleUploadSuccess"
       :on-remove="handleRemove"
       accept=".png, .jpg"
-      :limit="5"
+      :limit="10"
       :on-exceed="handleExceed"
     >
       <el-button size="small" type="primary">点击上传</el-button>
