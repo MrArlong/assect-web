@@ -49,7 +49,7 @@ export function updateShowStatus(data) {
   return request({
     url: '/assetFloot/update/showStatus',
     method: 'post',
-    data: data
+    params: data
   })
 }
 
@@ -57,7 +57,7 @@ export function updateFactoryStatus(data) {
   return request({
     url: '/assetFloot/update/factoryStatus',
     method: 'post',
-    data: data
+    params: data
   })
 }
 
@@ -65,7 +65,7 @@ export function updateGgimgFactoryStatus(data) {
   return request({
     url: '/assetGgimg/update/factoryStatus',
     method: 'post',
-    data: data
+    params: data
   })
 }
 
@@ -73,7 +73,7 @@ export function updateSftjStatus(data) {
   return request({
     url: '/assetFloot/update/sftjStatus',
     method: 'post',
-    data: data
+    params: data
   })
 }
 

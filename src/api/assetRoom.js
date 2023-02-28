@@ -81,7 +81,7 @@ export function updateFactoryStatus(data) {
   return request({
     url: '/room/update/factoryStatus',
     method: 'post',
-    data: data
+    params: data
   })
 }
 
@@ -89,7 +89,7 @@ export function updateIsOccupancy(data) {
   return request({
     url: '/room/update/updateIsOccupancy',
     method: 'post',
-    data: data
+    params: data
   })
 }
 
