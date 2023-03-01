@@ -17,8 +17,7 @@
           </el-row>
           <el-row>
             <el-col :span="4" class="table-cell">
-              <el-input v-show="false" v-model="order.orderNum" :rules=" [{ required: true, message: '请选择资产', trigger: 'blur' }]" />
-              {{ order.orderNum }}
+              <el-input v-model="order.orderNum" :rules=" [{ required: true, message: '请选择资产', trigger: 'blur' }]" />
             </el-col>
             <el-col :span="4" class="table-cell">
               <el-input v-model="order.zlr" />

@@ -21,14 +21,16 @@
       <el-form-item label="广告轮播图片：">
         <single-upload-list v-model="brand.lbtp" />
       </el-form-item>
-      <!--      <el-form-item label="简介：">
+      <el-form-item label="简介：">
         <el-input
           v-model="brand.remark"
-          :auto-size="true"
+          :autosize="{ minRows: 3, maxRows: 14}"
           type="textarea"
           placeholder="请输入内容"
+          maxlength="400"
+          show-word-limit
         />
-      </el-form-item>-->
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit('brandFrom')">提交</el-button>
         <el-button v-if="!isEdit" @click="resetForm('brandFrom')">重置</el-button>
