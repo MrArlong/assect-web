@@ -25,7 +25,7 @@
         <el-input v-model="room.decorationType" />
       </el-form-item>
       <el-form-item label="价格：">
-        <el-input v-model="room.price" />
+        <el-input v-model="room.price" type="number" />
       </el-form-item>
       <el-form-item label="是否已租：">
         <el-radio-group v-model="room.isOccupancy">

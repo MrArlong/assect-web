@@ -14,7 +14,7 @@ export function login(username, password) {
 export function getInfo() {
   return request({
     url: '/admin/info',
-    method: 'get',
+    method: 'get'
   })
 }
 
@@ -75,6 +75,9 @@ export function allocRole(data) {
   return request({
     url: '/admin/role/update',
     method: 'post',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
     data: data
   })
 }
